@@ -1,0 +1,39 @@
+set version 18.1R2-S1.4
+set system host-name vRR1
+set system root-authentication encrypted-password "$6$zaOQaTYZ$Y.hGQUCV.vJQl6k3OJACTsxtxA613I1EriuaiMIz/vHZe0V5zg/P3VK2CKTUYOsaPmsG1lgixpbqV2yolSTEy."
+set system scripts language python
+set system login user jcluser uid 2000
+set system login user jcluser class super-user
+set system login user jcluser authentication encrypted-password "$6$fqezb9SF$LIpEf59To7Bo.mjx8qxf/NLwuU/41m0SHkz6WYqWON0RPNqEwWkqFMdEW6iQh.yAMNQQQPY6wUu3c2lNO
+D6bw1"
+set system services ssh root-login allow
+set system services netconf ssh port 830
+set system services rest http port 3000
+set system services rest enable-explorer
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set system processes routing force-64-bit
+set interfaces em0 unit 0 family inet address 100.123.17.1/16
+set interfaces em3 unit 0 family inet address 10.100.111.2/24
+set interfaces em3 unit 0 family iso
+set interfaces em4 unit 0 family inet address 10.100.221.2/24
+set interfaces em4 unit 0 family iso
+set interfaces lo0 unit 0 family inet address 10.100.150.1/32
+set interfaces lo0 unit 0 family iso address 49.0001.1010.0150.0001.00
+set routing-options static route 0.0.0.0/0 next-hop 100.123.0.1
+set routing-options autonomous-system 64500
+set protocols bgp group IBGP-to-vRR2 type internal
+set protocols bgp group IBGP-to-vRR2 local-address 10.100.150.1
+set protocols bgp group IBGP-to-vRR2 neighbor 10.100.150.2
+set protocols bgp group vRR1 type internal
+set protocols bgp group vRR1 local-address 10.100.150.1
+set protocols bgp group vRR1 cluster 1.1.1.1
+set protocols bgp group vRR1 neighbor 10.100.100.1 description "to VMX1"
+set protocols bgp group vRR1 neighbor 10.100.100.2 description "to VMX2"
+set protocols bgp group vRR1 neighbor 10.100.100.3 description "to VMX3"
+set protocols isis level 1 disable
+set protocols isis interface em3.0
+set protocols isis interface em4.0
+set protocols isis interface lo0.0
